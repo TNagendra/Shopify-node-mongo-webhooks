@@ -21,16 +21,19 @@ import verifyRequest from "./middleware/verifyRequest.js";
 import proxyRouter from "./routes/app_proxy/index.js";
 import userRoutes from "./routes/index.js";
 
-setupCheck(); // Run a check to ensure everything is setup properly
+setupCheck(); // Run a check to ensure everything is set up properly
 
 const PORT = parseInt(process.env.PORT, 10) || 8081;
 const isDev = process.env.NODE_ENV === "dev";
 
 // MongoDB Connection
 const mongoUrl =
-  process.env.MONGO_URL || "mongodb://127.0.0.1:27017/shopify-express-app";
+  process.env.MONGO_URL 
 
-mongoose.connect(mongoUrl);
+mongoose.connect(mongoUrl)
+.then(()=>console.log('Mongodb connected....'))
+.catch((err)=>console.log(err))
+
 
 const createServer = async (root = process.cwd()) => {
   const app = Express();
@@ -64,7 +67,6 @@ const createServer = async (root = process.cwd()) => {
       }
     }
   );
-
   app.use(Express.json());
 
   app.post("/api/graphql", verifyRequest, async (req, res) => {
@@ -81,7 +83,7 @@ const createServer = async (root = process.cwd()) => {
       });
       res.status(200).send(response.body);
     } catch (e) {
-      console.error(`---> An error occured at GraphQL Proxy`, e);
+      console.error(`---> An error occurred at GraphQL Proxy`, e);
       res.status(403).send(e);
     }
   });
@@ -97,7 +99,7 @@ const createServer = async (root = process.cwd()) => {
     const { topic } = req.params;
     const shop = req.body.shop_domain;
 
-    console.warn(`--> GDPR request for ${shop} / ${topic} recieved.`);
+    console.warn(`--> GDPR request for ${shop} / ${topic} received.`);
 
     let response;
     switch (topic) {
@@ -122,7 +124,7 @@ const createServer = async (root = process.cwd()) => {
     if (response.success) {
       res.status(200).send();
     } else {
-      res.status(403).send("An error occured");
+      res.status(403).send("An error occurred");
     }
   });
 

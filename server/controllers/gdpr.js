@@ -87,4 +87,21 @@ const shopRedact = async (topic, shop, webhookRequestBody) => {
   }
 };
 
+const createProduct = async (topic, shop, webhookRequestBody) => {
+  // Payload
+  // The webhookRequestBody should contain the details of the product being created
+  try {
+    console.log(`Handle ${topic} for ${shop}`);
+    console.log(webhookRequestBody);
+    // Here you can add your logic to process the product creation webhook
+    // For example, you can save the product details to a database, trigger further actions, etc.
+    return { success: true };
+  } catch (e) {
+    console.error(e);
+    return { success: false };
+  }
+};
+
+export { createProduct };
+
 export { customerDataRequest, customerRedact, shopRedact };
